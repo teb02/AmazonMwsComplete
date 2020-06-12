@@ -12,7 +12,9 @@ class MwsSellersClientPack extends MwsSellerClient {
 
 	const SERVICE_NAME = 'Sellers';
 
-	const PARAM_NEXT_TOKEN = 'NextToken';
+	const PARAM_NEXT_TOKEN        = 'NextToken';
+	const PARAM_SELLER_ID         = 'SellerId';
+	const PARAM_MWS_AUTH_TOKEN    = 'MWSAuthToken';
 
 	/** @var string $marketplaceId      The MWS MarketplaceID string used in API connections */
 	protected $marketplaceId;
