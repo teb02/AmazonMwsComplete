@@ -289,8 +289,8 @@ class FbaInboundClientPack extends FbaInboundClient implements ThrottleAwareClie
      */
     public function callListInboundShipments($shipmentIdList = [],
         $shipmentStatusList = [],
-        DateTime $lastUpdatedAfter = null,
-        DateTime $lastUpdatedBefore = null)
+        \DateTime $lastUpdatedAfter = null,
+        \DateTime $lastUpdatedBefore = null)
     {
         $requestArray = [];
 
@@ -309,11 +309,11 @@ class FbaInboundClientPack extends FbaInboundClient implements ThrottleAwareClie
 		$requestArray[self::PARAM_SHIPMENT_STATUS_LIST] = ['member' => $shipmentStatusList];
 
         if ( ! empty($lastUpdatedAfter)) {
-            $requestArray[self::PARAM_LAST_UPDATED_AFTER] = $lastUpdatedAfter;
+            $requestArray[self::PARAM_LAST_UPDATED_AFTER] = $lastUpdatedAfter->format('c');
         }
 
         if ( ! empty($lastUpdatedBefore)) {
-            $requestArray[self::PARAM_LAST_UPDATED_BEFORE] = $lastUpdatedBefore;
+            $requestArray[self::PARAM_LAST_UPDATED_BEFORE] = $lastUpdatedBefore->format('c');
         }
 
         $requestArray = $this->signArray($requestArray);
