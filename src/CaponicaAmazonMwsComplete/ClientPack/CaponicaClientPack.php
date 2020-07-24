@@ -7,25 +7,27 @@ use CaponicaAmazonMwsComplete\Service\LoggerService;
 
 class CaponicaClientPack {
     public static function throttledCall(ThrottleAwareClientPackInterface $clientPack, $method, $options, $weight=null) {
-        try {
+//TODO: throttling logic is disabled because requests are being executed in jobs
+
+//        try {
             self::snooze($clientPack->getThrottleManager()->snoozeRequiredBeforeNewRequest($method, $weight));
             $clientPack->getThrottleManager()->addRequestLogForMethod($method, $weight);
             return $clientPack->$method($options);
-        } catch (\Exception $e) {
-            if (method_exists($e, 'getErrorCode') && 'RequestThrottled' == $e->getErrorCode()) {
-                LoggerService::logMessage("The request was throttled", LoggerService::INFO);
-                if ($snoozeLength = $clientPack->getThrottleManager()->getRestoreInterval($method, $weight)) {
-                    $clientPack->getThrottleManager()->exhaustRequestQuotaForMethod($method);
-                    self::snooze(ceil($snoozeLength) * 2); // Double the normal snooze since we bounced off the server limit
-
-                    // try again. If there's another exception it will bubble up to the caller.
-                    return $clientPack->$method($options);
-                } else {
-                    // don't try again if no snooze time is returned, it would just fail again
-                }
-            }
-            throw $e;
-        }
+//        } catch (\Exception $e) {
+//            if (method_exists($e, 'getErrorCode') && 'RequestThrottled' == $e->getErrorCode()) {
+//                LoggerService::logMessage("The request was throttled", LoggerService::INFO);
+//                if ($snoozeLength = $clientPack->getThrottleManager()->getRestoreInterval($method, $weight)) {
+//                    $clientPack->getThrottleManager()->exhaustRequestQuotaForMethod($method);
+//                    self::snooze(ceil($snoozeLength) * 2); // Double the normal snooze since we bounced off the server limit
+//
+//                    // try again. If there's another exception it will bubble up to the caller.
+//                    return $clientPack->$method($options);
+//                } else {
+//                    // don't try again if no snooze time is returned, it would just fail again
+//                }
+//            }
+//            throw $e;
+//        }
     }
 
     /**
